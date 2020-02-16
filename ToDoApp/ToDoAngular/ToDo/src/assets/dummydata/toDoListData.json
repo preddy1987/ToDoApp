@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "title": "Weakly Household Chores",
+        "description": "Task required to be completed weakly, at home",
+        "tasks": [
+            {
+                "title": "Clean Bathroom"     
+            },
+            {
+                "title": "Do Dishes"
+            },
+            {
+                "title": "Clean Kitchen"
+            },
+            {
+                "title": "Laundry"
+            },
+            {
+                "title": "Get Groceries"
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "title": "Daily Chores",
+        "description": "Task required to be completed daily, at home",
+        "tasks": [
+            {
+                "title": "Brush Teeth"     
+            },
+            {
+                "title": "Shave"
+            },
+            {
+                "title": "Take Shower"
+            },
+            {
+                "title": "Make Bed"
+            },
+            {
+                "title": "Drink a lot of Coffee"
+            }
+        ]
+    }
+]

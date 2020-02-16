@@ -1,0 +1,8 @@
+<p>todo-dashboard works!</p>
+<app-todo-list
+  [toDoListData]="toDoLists | async"
+  (toDoListSelected)="setSelectedToDoList($event)"
+></app-todo-list>
+
+<app-todo-list-thumbnail></app-todo-list-thumbnail>
+<app-todo-task></app-todo-task>

@@ -1,0 +1,4 @@
+<app-todo-list-thumbnail *ngFor="let toDoList of toDoListData"
+  [class.background]="toDoList === (currentToDoList | async)"
+  (click)="setCurrentToDoList(toDoList)"
+  [toDoList]="toDoList"></app-todo-list-thumbnail>
