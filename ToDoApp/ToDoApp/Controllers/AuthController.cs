@@ -99,7 +99,7 @@ namespace ToDoAPI.Controllers
                 Username = userModel.Username,
                 Salt = passHelper.Salt,
                 Hash = passHelper.Hash,
-                RoleId = (int)RoleManager.eRole.Customer
+                RoleId = "Customer"
             };
 
             _db.AddUserItem(newUser);

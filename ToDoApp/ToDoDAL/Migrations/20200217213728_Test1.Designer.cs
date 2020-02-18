@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoEFDB.Context;
 
 namespace ToDoDAL.Migrations
 {
     [DbContext(typeof(ToDoAppContext))]
-    partial class ToDoAppContextModelSnapshot : ModelSnapshot
+    [Migration("20200217213728_Test1")]
+    partial class Test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,7 +90,7 @@ namespace ToDoDAL.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("RoleId");
+                    b.Property<int>("RoleId");
 
                     b.Property<string>("Salt");
 

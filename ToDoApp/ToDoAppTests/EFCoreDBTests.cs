@@ -30,7 +30,7 @@ namespace ToDoAppTests
                     LastName = "TestLN",
                     Username = "TestUser",
                     Email = "test@test.com",
-                    RoleId = 2,
+                    RoleId = "Customer",
                     Password = "TestPass",
                     ConfirmPassword = "TestConfirmTest"
                 };
@@ -44,7 +44,7 @@ namespace ToDoAppTests
                 Assert.AreEqual("TestLN", context.UserItem.First().LastName);
                 Assert.AreEqual("TestUser", context.UserItem.First().Username);
                 Assert.AreEqual("test@test.com", context.UserItem.First().Email);
-                Assert.AreEqual(2, context.UserItem.First().RoleId);
+                Assert.AreEqual("Customer", context.UserItem.First().RoleId);
                 Assert.AreEqual("TestPass", context.UserItem.First().Password);
                 Assert.AreEqual("TestConfirmTest", context.UserItem.First().ConfirmPassword);
             };
@@ -91,7 +91,7 @@ namespace ToDoAppTests
                     LastName = "TestLN",
                     Username = "TestUser",
                     Email = "test@test.com",
-                    RoleId = 2,
+                    RoleId = "Customer",
                     Password = "TestPass",
                     ConfirmPassword = "TestConfirmTest"
                 };
@@ -106,7 +106,7 @@ namespace ToDoAppTests
                 Assert.AreEqual("TestLN", context.UserItem.First().LastName);
                 Assert.AreEqual("TestUser", context.UserItem.First().Username);
                 Assert.AreEqual("test@test.com", context.UserItem.First().Email);
-                Assert.AreEqual(2, context.UserItem.First().RoleId);
+                Assert.AreEqual("Customer", context.UserItem.First().RoleId);
                 Assert.AreEqual("TestPass", context.UserItem.First().Password);
                 Assert.AreEqual("TestConfirmTest", context.UserItem.First().ConfirmPassword);
             };

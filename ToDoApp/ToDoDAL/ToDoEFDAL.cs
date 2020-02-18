@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,12 @@ namespace ToDoDAL
 {
     public class ToDoEFDAL : IToDoApp
     {
+        //DbContextOptionsBuilder _optionsBuilder;
+        //public ToDoEFDAL(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    _optionsBuilder = optionsBuilder;
+        //}
+
         #region RoleItem
         public int AddRoleItem(RoleItem newRole)
         {
@@ -73,21 +80,19 @@ namespace ToDoDAL
         public int AddUserItem(UserItem newUser)
         {
             int id;
+            UserItem user = new UserItem();
+            user.FirstName = newUser.FirstName;
+            user.LastName = newUser.LastName;
+            user.Username = newUser.Username;
+            user.Email = newUser.Email;
+            user.Hash = newUser.Hash;
+            user.Salt = newUser.Salt;
+            user.RoleId = newUser.RoleId;
             using (var context = new ToDoAppContext())
             {
-                UserItem user = new UserItem();
-                user.FirstName = newUser.FirstName;
-                user.LastName = newUser.LastName;
-                user.Username = newUser.Username;
-                user.Email = newUser.Email;
-                user.Hash = newUser.Hash;
-                user.Salt = newUser.Salt;
-                user.RoleId = newUser.RoleId;
-                user.Password = newUser.Password;
-                user.ConfirmPassword = newUser.ConfirmPassword;
                 context.UserItem.Add(user);
                 context.SaveChanges();
-                id = user.Id;
+                id = context.UserItem.Last().Id;
                 
             }
             return id;
@@ -213,24 +218,23 @@ namespace ToDoDAL
         #endregion
 
         #region ToDoListItems
-        public ToDoListItem AddToDoList(ToDoListItem newToDoList, int userId)
+        public int AddToDoList(ToDoListItem newToDoList, int userId)
         {
-            UserItem user;
+            //UserItem user;
             ToDoListItem toDoList = new ToDoListItem();
+            toDoList.Category = newToDoList.Category;
+            toDoList.Description = newToDoList.Description;
+            toDoList.Name = newToDoList.Name;
+            toDoList.TimeCreated = DateTime.Now;
+            toDoList.UserItemId = userId;
             using (var context = new ToDoAppContext())
             {
-                user = context.UserItem.Find(userId);
-
-                toDoList.Category = newToDoList.Category;
-                toDoList.Description = newToDoList.Category;
-                toDoList.Name = newToDoList.Name;
-                toDoList.TimeCreated = DateTime.Now;
+                //user = context.UserItem.Find(userId);
                 context.ToDoListItem.Add(toDoList);
-
-                user.UserToDoListItems.Add(new UserToDoListItem { ToDoListItemId = toDoList.Id });
+                //user.UserToDoListItems.Add(new UserToDoListItem { ToDoListItemId = toDoList.Id });
                 context.SaveChanges();
             }
-            return toDoList;
+            return toDoList.Id;
         }
         #endregion
     }

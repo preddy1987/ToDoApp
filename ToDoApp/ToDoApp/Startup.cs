@@ -48,8 +48,6 @@ namespace ToDoAPI
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddScoped<IToDoApp>(m => new ToDoEFDAL());
-            //services.AddScoped<ILogService>(m => new LogDBService(connectionString));
-            //services.AddScoped<IBankingService>(m => new MockVendingDBService(connectionString));
 
         }
 

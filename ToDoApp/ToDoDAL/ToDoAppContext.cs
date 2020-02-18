@@ -25,7 +25,9 @@ namespace ToDoEFDB.Context
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=PREDDY-MASTER\\SQLEXPRESS;Initial Catalog=ToDoEFDB;Integrated Security=True");
+            optionsBuilder
+                .UseSqlServer("Data Source=PREDDY-MASTER\\SQLEXPRESS;Initial Catalog=ToDoEFDB;Integrated Security=True")
+                .UseLoggerFactory(MyConsoleLoggerFactory);
             //optionsBuilder.UseSqlServer("Server = (localdb)\\PREDDY-MASTER\\SQLEXPRESS; Database = ToDoEFDB; Trusted_Connection = True");
 
             base.OnConfiguring(optionsBuilder);

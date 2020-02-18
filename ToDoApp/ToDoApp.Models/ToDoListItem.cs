@@ -5,7 +5,8 @@ namespace ToDoApp.Models
 {
    public class ToDoListItem : BaseItem
     {
-        public List<UserToDoListItem> UserToDoListItems { get; set; }
+        //public List<UserToDoListItem> UserToDoListItems { get; set; }
+        public int UserItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
@@ -14,7 +15,7 @@ namespace ToDoApp.Models
 
         public ToDoListItem()
         {
-            UserToDoListItems = new List<UserToDoListItem>();
+            //UserToDoListItems = new List<UserToDoListItem>();
             ToDoItems = new List<ToDoItem>();
         }
     }

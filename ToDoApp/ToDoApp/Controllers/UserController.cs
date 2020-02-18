@@ -66,7 +66,7 @@ namespace ToDoAPI.Controllers
             catch (Exception ex)
             {
                 result.IsSuccessful = false;
-                result.Message = ex.Message;
+                result.Message = ex.Message + ex.InnerException;
             }
 
             return Json(result);

@@ -43,5 +43,9 @@ namespace ToDoApp
         bool UpdateRoleItem(RoleItem item);
         void DeleteRoleItem(int roleId);
         #endregion
+
+        #region ToDoListItem
+        int AddToDoList(ToDoListItem newToDoList, int userId);
+        #endregion
     }
 }

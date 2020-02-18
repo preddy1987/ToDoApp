@@ -44,7 +44,8 @@ namespace ToDoApp
 
             if (user != null)
             {
-                RoleName = (eRole)user.RoleId;
+                RoleName = (eRole)Enum.Parse(typeof(eRole), user.RoleId);
+                //RoleName = (eRole)user.RoleId;
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToDoApp.Models
 {
@@ -10,8 +11,10 @@ namespace ToDoApp.Models
         public string Email { get; set; }
         public string Hash { get; set; }
         public string Salt { get; set; }
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
+        [NotMapped]
         public string Password { get; set; }
+        [NotMapped]
         public string ConfirmPassword { get; set; }
         public List<UserToDoListItem> UserToDoListItems { get; set; }
 
