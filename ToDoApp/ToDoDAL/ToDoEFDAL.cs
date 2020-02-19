@@ -11,11 +11,21 @@ namespace ToDoDAL
 {
     public class ToDoEFDAL : IToDoApp
     {
-        //DbContextOptionsBuilder _optionsBuilder;
-        //public ToDoEFDAL(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    _optionsBuilder = optionsBuilder;
-        //}
+        DbContextOptions<ToDoAppContext> _options;
+        public ToDoEFDAL(DbContextOptionsBuilder<ToDoAppContext> optionsBuilder)
+        {
+            _options = optionsBuilder.Options;
+        }
+
+        public ToDoEFDAL(DbContextOptions<ToDoAppContext> options)
+        {
+            _options = options;
+        }
+
+        public ToDoEFDAL()
+        {
+
+        }
 
         #region RoleItem
         public int AddRoleItem(RoleItem newRole)
@@ -88,7 +98,7 @@ namespace ToDoDAL
             user.Hash = newUser.Hash;
             user.Salt = newUser.Salt;
             user.RoleId = newUser.RoleId;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 context.UserItem.Add(user);
                 context.SaveChanges();
@@ -100,7 +110,7 @@ namespace ToDoDAL
 
         public UserItem GetUserItem(int userId)
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 UserItem user = context.UserItem.Find(userId);
                 return user;
@@ -109,7 +119,7 @@ namespace ToDoDAL
 
         public UserItem GetUserItem(string name)
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 UserItem user = context.UserItem.Single(u => u.Username == name);
                 return user;
@@ -118,7 +128,7 @@ namespace ToDoDAL
 
         public List<UserItem> GetUserItems()
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 List<UserItem> users = context.UserItem.ToList();
 
@@ -128,7 +138,7 @@ namespace ToDoDAL
 
         public bool UpdateUserItem(UserItem updatedUser)
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 UserItem user = context.UserItem.Single(u => u.Id == updatedUser.Id);
                 user.FirstName = updatedUser.FirstName;
@@ -138,8 +148,6 @@ namespace ToDoDAL
                 user.Hash = updatedUser.Hash;
                 user.Salt = updatedUser.Salt;
                 user.RoleId = updatedUser.RoleId;
-                user.Password = updatedUser.Password;
-                user.ConfirmPassword = updatedUser.ConfirmPassword;
 
                 context.SaveChanges();
                 int? id = user.Id;
@@ -149,7 +157,7 @@ namespace ToDoDAL
 
         public void DeleteUserItem(int userId)
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 UserItem user = context.UserItem.Find(userId);
                 context.UserItem.Remove(user);
@@ -163,7 +171,7 @@ namespace ToDoDAL
         {
             ToDoItem toDo = new ToDoItem();
             ToDoListItem toDoList;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 toDoList = context.ToDoListItem.Find(toDoListId);
 
@@ -180,7 +188,7 @@ namespace ToDoDAL
         public bool UpdateToDoItem(ToDoItem updatedToDo)
         {
             int? id;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 ToDoItem toDo = context.ToDoItem.Find(updatedToDo.Id);
                 toDo.Name = updatedToDo.Name;
@@ -196,18 +204,26 @@ namespace ToDoDAL
         public ToDoItem GetToDoItem(int toDoItemId)
         {
             ToDoItem toDo;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 toDo = context.ToDoItem.Find(toDoItemId);
             }
             return toDo;
         }
 
-
+        public List<ToDoItem> GetToDoItems(int toDoListId)
+        {
+            List<ToDoItem> toDoList;
+            using (var context = new ToDoAppContext(_options))
+            {
+                toDoList = context.ToDoItem.Where(u => u.ToDoListItem.Id == toDoListId).ToList();
+            }
+            return toDoList;
+        }
 
         public void DeleteToDoItem(int toDoItemId)
         {
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 ToDoItem toDo = context.ToDoItem.Find(toDoItemId);
                 context.ToDoItem.Remove(toDo);
@@ -226,7 +242,7 @@ namespace ToDoDAL
             toDoList.Name = newToDoList.Name;
             toDoList.TimeCreated = DateTime.Now;
             toDoList.UserItemId = userId;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 //user = context.UserItem.Find(userId);
                 context.ToDoListItem.Add(toDoList);
@@ -239,7 +255,7 @@ namespace ToDoDAL
         public ToDoListItem GetToDoListItem(int toDoListItemId)
         {
             ToDoListItem toDoListItem;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 toDoListItem = context.ToDoListItem.Find(toDoListItemId);
             }
@@ -250,7 +266,7 @@ namespace ToDoDAL
         {
             int? id;
             ToDoListItem usersToDoListItem;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 usersToDoListItem = context.ToDoListItem.Find();
                 usersToDoListItem.Name = updatedToDoList.Name;
@@ -265,11 +281,21 @@ namespace ToDoDAL
         public List<ToDoListItem> GetToDoListItems(int userId)
         {
             List<ToDoListItem> usersToDoListItems;
-            using (var context = new ToDoAppContext())
+            using (var context = new ToDoAppContext(_options))
             {
                 usersToDoListItems = context.ToDoListItem.Where(u => u.UserItemId == userId).ToList();
             }
             return usersToDoListItems;
+        }
+
+        public void DeleteToDoList(ToDoListItem toDoList)
+        {
+            using (var context = new ToDoAppContext(_options))
+            {
+                //ToDoListItem toDoList = context.ToDoListItem.Find(toDoListId);
+                context.ToDoListItem.Remove(toDoList);
+                context.SaveChanges();
+            }
         }
 
 

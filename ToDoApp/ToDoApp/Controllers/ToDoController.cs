@@ -20,10 +20,10 @@ namespace ToDoAPI.Controllers
         {
 
         }
-        
 
-        // GET: api/ToDo
+
         [HttpGet]
+        [Route("gettodolists")]
         public ActionResult<List<ToDoListItem>> GetUsersToDoLists()
         {
             List<ToDoListItem> userToDoListItems;
@@ -36,6 +36,38 @@ namespace ToDoAPI.Controllers
                 userToDoListItems = new List<ToDoListItem>();
             }
             return userToDoListItems;
+        }
+
+        [HttpGet]
+        [Route("gettodolist")]
+        public ActionResult<ToDoListItem> GetUsersToDoList([FromBody] ToDoViewModel info)
+        {
+            ToDoListItem userToDoListItem;
+            try
+            {
+                userToDoListItem = _db.GetToDoListItem(info.ToDoList.Id);
+            }
+            catch (Exception ex)
+            {
+                userToDoListItem = new ToDoListItem();
+            }
+            return userToDoListItem;
+        }
+
+        [HttpGet]
+        [Route("gettodoitems")]
+        public ActionResult<List<ToDoItem>> GetToDoItems([FromBody] ToDoViewModel info)
+        {
+            List<ToDoItem> userToDoItems;
+            try
+            {
+                userToDoItems = _db.GetToDoItems(info.ToDoList.Id);
+            }
+            catch (Exception ex)
+            {
+                userToDoItems = new List<ToDoItem>();
+            }
+            return userToDoItems;
         }
 
         [HttpPost]
@@ -147,23 +179,22 @@ namespace ToDoAPI.Controllers
             }
             return Json(result);
         }
-        //// GET: api/ToDo/
-        //[HttpGet]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
-        //// PUT: api/ToDo/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpPost]
+        [Route("deletetodolist")]
+        public ActionResult<StatusViewModel> DeleteToDoList([FromBody] ToDoViewModel info)
+        {
+            StatusViewModel result = new StatusViewModel();
+            try
+            {
+                _db.DeleteToDoList(info.ToDoList);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+            return Json(result);
+        }
     }
 }

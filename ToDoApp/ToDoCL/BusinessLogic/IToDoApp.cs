@@ -40,6 +40,7 @@ namespace ToDoApp
         int AddRoleItem(RoleItem item);
         List<RoleItem> GetRoleItems();
         RoleItem GetRoleItem(int roleId);
+        List<ToDoItem> GetToDoItems(int id);
         bool UpdateRoleItem(RoleItem item);
         void DeleteRoleItem(int roleId);
         #endregion
@@ -55,6 +56,7 @@ namespace ToDoApp
         int AddToDoItem(ToDoItem newToDo, int toDoListId);
         bool UpdateToDoItem(ToDoItem updatedToDo);
         ToDoItem GetToDoItem(int toDoId);
+        void DeleteToDoList(ToDoListItem toDoList);
         #endregion
     }
 }

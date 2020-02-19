@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using ToDoEFDB.Context;
 using ToDoApp;
 using ToDoDAL;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace ToDoAPI
 {
@@ -18,6 +20,9 @@ namespace ToDoAPI
         {
             Configuration = configuration;
         }
+
+        public static readonly LoggerFactory MyConsoleLoggerFactory = new LoggerFactory(new[] {
+            new ConsoleLoggerProvider((category, level) => category == DbLoggerCategory.Database.Command.Name && level == LogLevel.Information, true)});
 
         public IConfiguration Configuration { get; }
 
@@ -41,13 +46,14 @@ namespace ToDoAPI
             services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddDbContext<ToDoAppContext>(
-            //    options => options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
+
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddScoped<IToDoApp>(m => new ToDoEFDAL());
+            DbContextOptionsBuilder<ToDoAppContext> optionsBuilder = new DbContextOptionsBuilder<ToDoAppContext>();
+            optionsBuilder.UseSqlServer(connectionString).UseLoggerFactory(MyConsoleLoggerFactory);
+            services.AddScoped<IToDoApp>(m => new ToDoEFDAL(optionsBuilder));
 
         }
 
