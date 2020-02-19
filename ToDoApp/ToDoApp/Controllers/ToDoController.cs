@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using ToDoAPI.ViewModels;
 using ToDoApp;
 using ToDoApp.Models;
@@ -23,29 +24,30 @@ namespace ToDoAPI.Controllers
 
         // GET: api/ToDo
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<List<ToDoListItem>> GetUsersToDoLists()
         {
-            return new string[] { "value1", "value2" };
+            List<ToDoListItem> userToDoListItems;
+            try
+            {
+                userToDoListItems = _db.GetToDoListItems(CurrentUser.Id);
+            }
+            catch (Exception ex)
+            {
+                userToDoListItems = new List<ToDoListItem>();
+            }
+            return userToDoListItems;
         }
 
-        // GET: api/ToDo/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/ToDo
         [HttpPost]
         [Route("addtodolist")]
-        public ActionResult<StatusViewModel> addToDoList([FromBody] ToDoViewModel info)
+        public ActionResult<StatusViewModel> AddToDoList([FromBody] ToDoViewModel info)
         {
             StatusViewModel result = new StatusViewModel();
 
             ToDoListItem newToDoList = new ToDoListItem();
-            newToDoList.Name = info.Name;
-            newToDoList.Description = info.Description;
-            newToDoList.Category = info.Category;
+            newToDoList.Name = info.ToDoList.Name;
+            newToDoList.Description = info.ToDoList.Description;
+            newToDoList.Category = info.ToDoList.Category;
             
             try
             {
@@ -59,17 +61,109 @@ namespace ToDoAPI.Controllers
 
             return Json(result);
         }
-
-        // PUT: api/ToDo/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("addtodoitem")]
+        public ActionResult<StatusViewModel> AddToDoItem([FromBody] ToDoViewModel info)
         {
+            StatusViewModel result = new StatusViewModel();
+
+            ToDoItem newToDo = new ToDoItem();
+            newToDo.Name = info.ToDo.Name;
+            newToDo.Description = info.ToDo.Description;
+
+            try
+            {
+                _db.AddToDoItem(newToDo, info.ToDoList.Id);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+
+            return Json(result);
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost]
+        [Route("updatetodoitem")]
+        public ActionResult<StatusViewModel> UpdateToDoItem([FromBody] ToDoViewModel info)
         {
+            StatusViewModel result = new StatusViewModel();
+
+            ToDoItem updatedToDo = new ToDoItem();
+            updatedToDo.Name = info.ToDo.Name;
+            updatedToDo.Description = info.ToDo.Description;
+            //updatedToDo.Id = info.ToDo.Id;
+            try
+            {
+
+                updatedToDo.Id = _db.GetToDoItem(info.ToDo.Id).Id;
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+            try
+            {
+                _db.UpdateToDoItem(updatedToDo);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+            return Json(result);
         }
+
+        [HttpPost]
+        [Route("updatetodolist")]
+        public ActionResult<StatusViewModel> UpdateToDoList([FromBody] ToDoViewModel info)
+        {
+            StatusViewModel result = new StatusViewModel();
+
+            ToDoListItem updatedToDoList = new ToDoListItem();
+            updatedToDoList.Name = info.ToDoList.Name;
+            updatedToDoList.Description = info.ToDoList.Description;
+            updatedToDoList.Category = info.ToDoList.Category;
+            try
+            {
+
+                updatedToDoList.Id = _db.GetToDoListItem(info.ToDoList.Id).Id;
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+            try
+            {
+                _db.UpdateToDoListItem(updatedToDoList);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccessful = false;
+                result.Message = ex.Message;
+            }
+            return Json(result);
+        }
+        //// GET: api/ToDo/
+        //[HttpGet]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
+
+        //// PUT: api/ToDo/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
+
+        //// DELETE: api/ApiWithActions/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

@@ -159,7 +159,7 @@ namespace ToDoDAL
         #endregion
 
         #region ToDoItem
-        public ToDoItem AddToDo(ToDoItem newToDo, int toDoListId)
+        public int AddToDoItem(ToDoItem newToDo, int toDoListId)
         {
             ToDoItem toDo = new ToDoItem();
             ToDoListItem toDoList;
@@ -174,11 +174,12 @@ namespace ToDoDAL
                 context.ToDoItem.Add(toDo);
                 context.SaveChanges();
             }
-            return toDo;
+            return toDo.Id;
         }
 
-        public bool UpdateToDo(ToDoItem updatedToDo)
+        public bool UpdateToDoItem(ToDoItem updatedToDo)
         {
+            int? id;
             using (var context = new ToDoAppContext())
             {
                 ToDoItem toDo = context.ToDoItem.Find(updatedToDo.Id);
@@ -187,30 +188,28 @@ namespace ToDoDAL
                 toDo.ToDoListItem = updatedToDo.ToDoListItem;
                 context.SaveChanges();
 
-                int? id = toDo.Id;
-                return id != null;
+                id = toDo.Id;                
             }
+            return id != null;
         }
 
-        public ToDoItem GetToDo(int toDoId)
+        public ToDoItem GetToDoItem(int toDoItemId)
         {
             ToDoItem toDo;
             using (var context = new ToDoAppContext())
             {
-                toDo = context.ToDoItem.Find(toDoId);
-                context.ToDoItem.Remove(toDo);
-                context.SaveChanges();
+                toDo = context.ToDoItem.Find(toDoItemId);
             }
             return toDo;
         }
 
 
 
-        public void DeleteToDo(int toDoId)
+        public void DeleteToDoItem(int toDoItemId)
         {
             using (var context = new ToDoAppContext())
             {
-                ToDoItem toDo = context.ToDoItem.Find(toDoId);
+                ToDoItem toDo = context.ToDoItem.Find(toDoItemId);
                 context.ToDoItem.Remove(toDo);
                 context.SaveChanges();
             }
@@ -236,6 +235,44 @@ namespace ToDoDAL
             }
             return toDoList.Id;
         }
+
+        public ToDoListItem GetToDoListItem(int toDoListItemId)
+        {
+            ToDoListItem toDoListItem;
+            using (var context = new ToDoAppContext())
+            {
+                toDoListItem = context.ToDoListItem.Find(toDoListItemId);
+            }
+            return toDoListItem;
+        }
+
+        public bool UpdateToDoListItem(ToDoListItem updatedToDoList)
+        {
+            int? id;
+            ToDoListItem usersToDoListItem;
+            using (var context = new ToDoAppContext())
+            {
+                usersToDoListItem = context.ToDoListItem.Find();
+                usersToDoListItem.Name = updatedToDoList.Name;
+                usersToDoListItem.Description = updatedToDoList.Description;
+                usersToDoListItem.Category = updatedToDoList.Category;
+                context.SaveChanges();
+                id = usersToDoListItem.Id;
+            }
+            return id != null;
+        }
+
+        public List<ToDoListItem> GetToDoListItems(int userId)
+        {
+            List<ToDoListItem> usersToDoListItems;
+            using (var context = new ToDoAppContext())
+            {
+                usersToDoListItems = context.ToDoListItem.Where(u => u.UserItemId == userId).ToList();
+            }
+            return usersToDoListItems;
+        }
+
+
         #endregion
     }
 }

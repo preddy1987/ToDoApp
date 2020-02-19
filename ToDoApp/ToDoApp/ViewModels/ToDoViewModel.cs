@@ -8,8 +8,7 @@ namespace ToDoAPI.ViewModels
 {
     public class ToDoViewModel
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; }
+        public ToDoItem ToDo { get; set; }
+        public ToDoListItem ToDoList { get; set; }
     }
 }

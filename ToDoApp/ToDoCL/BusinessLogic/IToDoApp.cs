@@ -46,6 +46,15 @@ namespace ToDoApp
 
         #region ToDoListItem
         int AddToDoList(ToDoListItem newToDoList, int userId);
+        List<ToDoListItem> GetToDoListItems(int userId);
+        bool UpdateToDoListItem(ToDoListItem updatedToDoList);
+        ToDoListItem GetToDoListItem(int toDoListItemId);
+        #endregion
+
+        #region ToDoItem
+        int AddToDoItem(ToDoItem newToDo, int toDoListId);
+        bool UpdateToDoItem(ToDoItem updatedToDo);
+        ToDoItem GetToDoItem(int toDoId);
         #endregion
     }
 }

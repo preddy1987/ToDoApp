@@ -20,9 +20,9 @@ namespace ToDoAPI.Controllers
         
         [HttpGet]
         [Route("api/user")]
-        public ActionResult<IEnumerable<UserItem>> Get()
+        public ActionResult<IEnumerable<UserItem>> GetUser()
         {
-            var result = Json(_db.GetUserItems());
+            var result = Json(_db.GetUserItem(CurrentUser.Id));
             return GetAuthenticatedJson(result, (Role.IsExecutive || Role.IsAdministrator));
         }
 
